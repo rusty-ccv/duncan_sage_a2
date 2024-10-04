@@ -1,22 +1,3 @@
-﻿#Duncan Sage - 24034122
-
-
-
-
-
-
-# Create a Python file called part2.py. Copy the code you wrote in part 1 into the part2.py file. Then update
-# your code so that it:
-# • Scrapes the data from the Sydney, Melbourne, and Brisbane pages using the request library and
-# Beautiful Soup instead of reading it from a csv file.
-# • Uses the datetime module for any date or time related data.
-# • Uses the logging module to output appropriate messages where applicable e.g. info, warning, error
-# messages.
-# • Performs some basic data analysis using pandas instead of a set.
-# You mark will be determined based on:
-# • The criteria listed in the previous section.
-# • How well you demonstrate the concepts you have learned in Module 5
-
 
 from bs4 import BeautifulSoup
 import requests
@@ -56,136 +37,18 @@ class Forecast(Location):
         self.rainfall_chance = rainfall_chance
         self.forecast = forecast
         self.warning = warning
-
-    # protected getters and setters
-    @property
-    def upload_date(self):
-        return self._upload_date
-    
-    @upload_date.setter
-    def upload_date(self, upload_date):
-        if not isinstance(upload_date, datetime):
-            raise ValueError("upload_date must be a datetime object")
-        self._upload_date = upload_date
-
-    @property
-    def forecast_date(self):
-        return self._forecast_date
-    
-    @forecast_date.setter
-    def forecast_date(self, forecast_date):
-        if not isinstance(forecast_date, datetime):
-            raise ValueError("forecast_date must be a datetime object")
-        self._forecast_date = forecast_date
-    
-    @property
-    def min_temp(self):
-        return self._min_temp
-    
-    @min_temp.setter
-    def min_temp(self, min_temp):
-        if not isinstance(min_temp, str):
-            raise ValueError("min_temp must be a string")
-        self._min_temp = min_temp
-    
-    @property
-    def max_temp(self):
-        return self._max_temp
-    
-    @max_temp.setter
-    def max_temp(self, max_temp):
-        if not isinstance(max_temp, str):
-            raise ValueError("max_temp must be a string")
-        self._max_temp = max_temp
-
-    @property
-    def condition(self):
-        return self._condition
-    
-    @condition.setter
-    def condition(self, condition):
-        if not isinstance(condition, str):
-            raise ValueError("condition must be a string")
-        self._condition = condition
-
-    @property
-    def rainfall_possible(self):
-        return self._rainfall_possible
-
-    @rainfall_possible.setter
-    def rainfall_possible(self, rainfall_possible):
-        if not isinstance(rainfall_possible, str):
-            raise ValueError("rainfall_possible must be a string")
-        self._rainfall_possible = rainfall_possible
-
-    @property
-    def rainfall_chance(self):
-        return self._rainfall_chance
-    
-    @rainfall_chance.setter
-    def rainfall_chance(self, rainfall_chance):
-        if not isinstance(rainfall_chance, str):
-            raise ValueError("rainfall_chance must be a string")
-        self._rainfall_chance = rainfall_chance
-    
-    @property
-    def forecast(self):
-        return self._forecast
-    
-    @forecast.setter
-    def forecast(self, forecast):
-        if not isinstance(forecast, str):
-            raise ValueError("forecast must be a string")
-        self._forecast = forecast
-    
-    @property
-    def warning(self):
-        return self._warning
-    
-    @warning.setter
-    def warning(self, warning):
-        if not isinstance(warning, str):
-            raise ValueError("warning must be a string")
-        self._warning = warning
     
     def print_contents(self):
         return (self.location_name, self.upload_date, self.forecast_date, self.min_temp, self.max_temp,
                 self.condition, self.rainfall_possible, self.rainfall_chance, self.forecast, self.warning)
         
 class DailyForecast(Forecast):
-    def to_dict(self):
-        return {
-            'location_name': self.location_name,
-            'forecast_date': self.forecast_date,
-            'min_temp': self.extract_number(self.min_temp),
-            'max_temp': self.extract_number(self.max_temp),
-            'condition': self.condition,
-            'rainfall_possible_mm': self.extract_rainfall(self.rainfall_possible),
-            'rainfall_chance_percent': self.extract_number(self.rainfall_chance)
-        }
-
-    # created with GenAI
-    def extract_number(self, text):
-        return float(''.join(filter(str.isdigit, text)))
-    # created with GenAI
-    def extract_rainfall(self, text):
-        numbers = [float(num) for num in text.split() if num.replace('.', '', 1).isdigit()]
-        return numbers if len(numbers) > 1 else numbers[0]
+    pass
 
 class WeeklyForecast:
     def __init__(self, upload_date):
         self.upload_date = upload_date
         self.daily_forecasts = {}
-
-    @property
-    def upload_date(self):
-        return self._upload_date
-    
-    @upload_date.setter
-    def upload_date(self, upload_date):
-        if not isinstance(upload_date, datetime):
-            raise ValueError("upload_date must be a datetime object")
-        self._upload_date = upload_date
 
     def location_print(self, location_name):
         for daily_forecast in self.daily_forecasts.values():
@@ -277,16 +140,6 @@ class Main:
         self.page_reader.get_subpages(page_url)
         self.page_reader.scrape_page(page_url)
 
-    @property
-    def file_name(self):
-        return self._file_name
-    
-    @file_name.setter
-    def file_name(self, file_name):
-        if not isinstance(file_name, str):
-            raise ValueError("file_name must be a string")
-        self._file_name = file_name
-
     def print_contents(self):
         for weekly_forecast in self.weekly_forecasts:
             weekly_forecast.print_contents()
@@ -296,32 +149,16 @@ class Main:
             weekly_forecast.location_print(location_name)
 
 class DataAnalysis:
-    def __init__(self, weekly_forecasts):
-        self.weekly_forecasts = weekly_forecasts
+    pass
 
-    def forecasts_to_dataframe(self):
-        data = []
-        for weekly_forecast in self.weekly_forecasts:
-            for daily_forecast in weekly_forecast.daily_forecasts.values():
-                data.append(daily_forecast.to_dict())
-        df = pd.DataFrame(data)
-        return df
-    def average_temperature_by_city(self):
-        df = self.forecasts_to_dataframe()
-        df['average_temp'] = (df['min_temp'] + df['max_temp']) / 2
-        average_temp_by_city = df.groupby('location_name')['average_temp'].mean().reset_index()
-        return average_temp_by_city
-    
 ######## test code ########
         
 websiteURL = " https://prog2007.it.scu.edu.au/weather"
 page1 = Main(websiteURL)
 
-# # Print the forecast for Brisbane
-# location_name = "Melbourne"
-# page1.location_print(location_name)
 
-# data analysis
-data_analysis = DataAnalysis(page1.weekly_forecasts)
-average_temps = data_analysis.average_temperature_by_city()
-print(average_temps)
+# # Print the forecast for Brisbane
+location_name = "Melbourne"
+page1.location_print(location_name)
+# test scrape_page
+#page1.page_reader.scrape_page(websiteURL)

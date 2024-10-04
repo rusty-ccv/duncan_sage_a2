@@ -1,44 +1,40 @@
 ﻿#Duncan Sage - 24034122
 
-# Your job is to write an object-oriented program in Python with a minimum of five classes that:
-# • Reads the data in the csv file and uses the data to create appropriate objects.
-# • Stores all of the objects in appropriate collection(s).
-# • Uses a Set to perform some basic data analysis.
-# Thing to think about:
-# • How will you handle and manipulate the strings in the csv file?
-# • How will you structure your classes and what relationships will the classes contain?
-# • What attributes should each class have and what data type should they be?
-# • How will you secure and validate the data in each class?
-# • How will you handle any potential errors in your program?
-# Two possible ways to approach the problem may be to:
-# • Have a forecast class with attributes for individual items in each forecast.
-# • Have an observation class and view the individual items in each forecast as an observation (similar to
-# the sample project used in the Live Coding sessions)
-
-#Location,Updated Date,Forecast Date,Min Temp,Max Temp,Condition,Possible Rainfall,Chance of any Rain,Forecast,Warning
-
 import csv
 
 #class Attribute getters and setters used genAI to copy from hand written code
 class Location:
+    '''Location class to store the location name
+    :param location_name: the name of the location ie. Brisbane    
+    '''
     def __init__(self, location_name):
         self.location_name = location_name
 
     # private getters and setters
     @property
     def location_name(self):
-        return self._location_name
+        return self.__location_name
     
     @location_name.setter
     def location_name(self, location_name):
         if not isinstance(location_name, str):
             raise ValueError("location_name must be a string")
-        self._location_name = location_name
+        self.__location_name = location_name
 
 class Forecast(Location):
+    '''Forecast class to store the forecast details. inherits from Location class and is the parent class of DailyForecast
+    :param upload_date: the date the forecasts were uploaded
+    :param forecast_date: the date of the forecast
+    :param temperature_range: the range of temperatures for the forecast
+    :param condition: the weather condition for the forecast
+    :param rainfall_possible: the amount of rainfall possible (mm)
+    :param rainfall_chance: the chance of rainfall (%)
+    :param forecast: the forecast (text)
+    :param warning: any UV warnings for the forecast
+    '''
     def __init__(self, location_name, upload_date, forecast_date, temperature_range, 
                  condition, rainfall_possible, rainfall_chance, forecast, warning):
-        super().__init__(location_name)
+        super().__init__(location_name) # Call the parent class constructor
         self.upload_date = upload_date
         self.forecast_date = forecast_date
         self.temperature_range = temperature_range
@@ -48,108 +44,114 @@ class Forecast(Location):
         self.forecast = forecast
         self.warning = warning
 
-    # protected getters and setters
+    # private getters and setters
     @property
     def upload_date(self):
-        return self._upload_date
+        return self.__upload_date
     
     @upload_date.setter
     def upload_date(self, upload_date):
         if not isinstance(upload_date, str):
             raise ValueError("upload_date must be a string")
-        self._upload_date = upload_date
+        self.__upload_date = upload_date
 
     @property
     def forecast_date(self):
-        return self._forecast_date
+        return self.__forecast_date
     
     @forecast_date.setter
     def forecast_date(self, forecast_date):
         if not isinstance(forecast_date, str):
             raise ValueError("forecast_date must be a string")
-        self._forecast_date = forecast_date
+        self.__forecast_date = forecast_date
     
     @property
     def temperature_range(self):
-        return self._temperature_range
+        return self.__temperature_range
     
     @temperature_range.setter
     def temperature_range(self, temperature_range):
         if not isinstance(temperature_range, dict):
             raise ValueError("temperature_range must be a dictionary")
-        self._temperature_range = temperature_range
+        self.__temperature_range = temperature_range
 
     @property
     def condition(self):
-        return self._condition
+        return self.__condition
     
     @condition.setter
     def condition(self, condition):
         if not isinstance(condition, str):
             raise ValueError("condition must be a string")
-        self._condition = condition
+        self.__condition = condition
 
     @property
     def rainfall_possible(self):
-        return self._rainfall_possible
+        return self.__rainfall_possible
 
     @rainfall_possible.setter
     def rainfall_possible(self, rainfall_possible):
         if not isinstance(rainfall_possible, str):
             raise ValueError("rainfall_possible must be a string")
-        self._rainfall_possible = rainfall_possible
+        self.__rainfall_possible = rainfall_possible
 
     @property
     def rainfall_chance(self):
-        return self._rainfall_chance
+        return self.__rainfall_chance
     
     @rainfall_chance.setter
     def rainfall_chance(self, rainfall_chance):
         if not isinstance(rainfall_chance, str):
             raise ValueError("rainfall_chance must be a string")
-        self._rainfall_chance = rainfall_chance
+        self.__rainfall_chance = rainfall_chance
     
     @property
     def forecast(self):
-        return self._forecast
+        return self.__forecast
     
     @forecast.setter
     def forecast(self, forecast):
         if not isinstance(forecast, str):
             raise ValueError("forecast must be a string")
-        self._forecast = forecast
+        self.__forecast = forecast
     
     @property
     def warning(self):
-        return self._warning
+        return self.__warning
     
     @warning.setter
     def warning(self, warning):
         if not isinstance(warning, str):
             raise ValueError("warning must be a string")
-        self._warning = warning
+        self.__warning = warning
     
-    def print_contents(self):
+    def print_contents(self): 
         return (self.location_name, self.upload_date, self.forecast_date, self.temperature_range, self.temperature_range, 
                 self.condition, self.rainfall_possible, self.rainfall_chance, self.forecast, self.warning)
         
 class DailyForecast(Forecast):
+    '''DailyForecast class to store the daily forecast details. Inherits from Forecast class'''
     pass
 
 class WeeklyForecast:
+    '''WeeklyForecast class to store the weekly forecast details. The date the forecasts were uploaded and the daily forecasts
+    :param upload_date: the date the forecasts were uploaded
+    :param daily_forecasts: the daily forecasts for the week in a dictionary
+    '''
     def __init__(self, upload_date):
         self.upload_date = upload_date
         self.daily_forecasts = {}
 
+    # private getters and setters
     @property
     def upload_date(self):
-        return self._upload_date
+        return self.__upload_date
     
     @upload_date.setter
     def upload_date(self, upload_date):
         if not isinstance(upload_date, str):
             raise ValueError("upload_date must be a string")
-        self._upload_date = upload_date
+        self.__upload_date = upload_date
 
     def print_contents(self):
         for daily_forecast in self.daily_forecasts.values():
@@ -166,8 +168,12 @@ class WeeklyForecast:
         key = (daily_forecast.location_name, daily_forecast.forecast_date)
         if key not in self.daily_forecasts:
             self.daily_forecasts[key] = daily_forecast
+            print(f"Added forecast for {daily_forecast.location_name} on {daily_forecast.forecast_date}") # Debugging print statement
 
 class CsvReader:
+    '''CsvReader class to read the csv file and create the objects
+    :param main: the main class object
+    '''
     def __init__(self, main):
         self.main = main
     
@@ -202,21 +208,26 @@ class CsvReader:
             return {}
 
 class Main:
+    '''Main class to store the weekly forecasts and read the csv file
+    :param file_name: the name of the csv file
+    :param weekly_forecasts: the weekly forecasts in a list
+    '''
     def __init__(self, file_name):
         self.file_name = file_name
         self.weekly_forecasts = []
         csv_reader = CsvReader(self)
         csv_reader.read_csv(self.file_name)
 
+    # private getters and setters
     @property
     def file_name(self):
-        return self._file_name
+        return self.__file_name
     
     @file_name.setter
     def file_name(self, file_name):
         if not isinstance(file_name, str):
             raise ValueError("file_name must be a string")
-        self._file_name = file_name
+        self.__file_name = file_name
 
     def print_contents(self):
         for weekly_forecast in self.weekly_forecasts:
@@ -227,19 +238,24 @@ class Main:
             weekly_forecast.location_print(location_name)
 
 class DataAnalysis:
+    '''DataAnalysis class to analyse the data and find the average temperature
+    :param main: the main class object
+    :param average_temperature: the average temperature from the average_temperature method
+    '''
     def __init__(self, main):
         self.main = main
-        self._average_temperature = 0
+        self.average_temperature = 0
     
+    # private getters and setters
     @property
     def average_temperature(self):
-        return self._average_temperature
+        return self.__average_temperature
     
     @average_temperature.setter
     def average_temperature(self, average_temperature):
         if not isinstance(average_temperature, (int, float)):
             raise ValueError("average_temperature must be a number")
-        self._average_temperature = average_temperature
+        self.__average_temperature = average_temperature
 
     # created with the help of GenAI
     def find_average_temperature(self):
@@ -262,7 +278,7 @@ class DataAnalysis:
 csv_file = "weather.csv"
 file1 = Main(csv_file)
 
-# Print the contents of the file
+# Data analysis
 data_analysis = DataAnalysis(file1)
 print(data_analysis.find_average_temperature())
 
