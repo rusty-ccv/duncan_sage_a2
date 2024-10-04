@@ -151,15 +151,14 @@ class WeeklyForecast:
             raise ValueError("upload_date must be a string")
         self._upload_date = upload_date
 
-    def location_print(location_name):
-        for weekly_forecast in file1.weekly_forecasts:
-            for daily_forecast in weekly_forecast.daily_forecasts.values():
-                if daily_forecast.location_name == location_name:
-                    print(daily_forecast.print_contents())
-
     def print_contents(self):
         for daily_forecast in self.daily_forecasts.values():
             print(daily_forecast.print_contents())
+
+    def location_print(self, location_name):
+        for daily_forecast in self.daily_forecasts.values():
+            if daily_forecast.location_name == location_name:
+                print(daily_forecast.print_contents())
     
     def add_daily_forecast(self, daily_forecast):
         if not isinstance(daily_forecast, DailyForecast):
@@ -223,6 +222,10 @@ class Main:
         for weekly_forecast in self.weekly_forecasts:
             weekly_forecast.print_contents()
 
+    def location_print(self, location_name):
+        for weekly_forecast in self.weekly_forecasts:
+            weekly_forecast.location_print(location_name)
+
 class DataAnalysis:
     def __init__(self, main):
         self.main = main
@@ -265,4 +268,4 @@ print(data_analysis.find_average_temperature())
 
 # Print the forecast for Brisbane
 location_name = "Brisbane"
-WeeklyForecast.location_print(location_name)
+file1.location_print(location_name)
